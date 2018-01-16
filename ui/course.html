@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>所有</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/head.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../bootstrap/js/jquery.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+
+        ul.nav-tabs {
+            width: 140px;
+            margin-top: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+        }
+
+        ul.nav-tabs li {
+            margin: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        ul.nav-tabs li:first-child {
+            border-top: none;
+        }
+
+        ul.nav-tabs li a {
+            margin: 0;
+            padding: 8px 16px;
+            border-radius: 0;
+        }
+
+        ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover {
+            color: #fff;
+            background: #0088cc;
+            border: 1px solid #0088cc;
+        }
+
+        ul.nav-tabs li:first-child a {
+            border-radius: 4px 4px 0 0;
+        }
+
+        ul.nav-tabs li:last-child a {
+            border-radius: 0 0 4px 4px;
+        }
+
+        ul.nav-tabs.affix {
+            top: 30px; /* Set the top position of pinned element */
+        }
+
+        h4 {
+            color: #3c763d;
+        }
+        .header-login {width: 100%;height: 45px;}
+        .header-login>div {max-width: 100px;align-content: center;position: absolute;right: 20px;top: 10px;}
+        .mhand {cursor: pointer; padding-right: 8px;padding-left: 8px;min-height: 100px}
+    </style>
+    <script>
+        $.get("../server/views/router.php?action=categoryAndType", function (d) {
+            if(d) {
+                var data  = JSON.parse(d);
+                var categoryList = data['data'];
+
+                var strBuilder    = "";//动态拼接菜单
+                var strNavBuilder = "";//
+
+                $.each(categoryList, function (key, arr) {
+
+                    strNavBuilder += "<li><a href='#"+ key +"'>"+ key +"</a></li>";
+
+                    if (arr.length <= 0) {//没有子菜单
+                        strBuilder += "<h3 id='"+ key +"'>"+ key +"</h3><hr>";
+
+                    } else {//有子菜单
+                        strBuilder += "<h3 id='"+ key +"'>"+ key +"</h3><hr>";
+                        strBuilder += "<div class=\"row\">";
+                        for (var i = 0; i < arr.length; i++) {
+                            strBuilder += "<div class=\"col-lg-4 col-md-4 col-sm-6 col-xs-6\">";
+                            strBuilder += "<div class=\"panel mhand\" onclick='goCourseDetail("+ arr[i]['type_id'] +")'>";
+                            strBuilder += "<h4>"+ arr[i]['name']  +"</h4>";//arr[i]['type_id']
+                            strBuilder += "<div><img src=\"../img/icon-swift.png\" style=\"float: left;margin-right: 15px;\"/><strong>"+ arr[i]['note'] +"</strong></div>"
+                            strBuilder += "</div></div>";//end panel  / col
+                        }
+                        strBuilder += "</div>";// end row
+                    }
+                });
+
+                $(".col-xs-9").html(strBuilder);
+                $(".nav-stacked").html(strNavBuilder);
+                $(".nav-stacked li:first-child").addClass("active");
+
+            }else {//无数据
+            }
+        });
+
+        ///
+        function goCourseDetail(typeId) {
+            window.location.href = "course-detail.php?typeId=" + typeId;
+        }
+    </script>
+</head>
+<body data-spy="scroll" data-target="#scrollSpy">
+<!--login sign up-->
+<div class="header-login">
+    <div>
+        <a href="#">登录</a>
+        <a href="#">注册</a>
+    </div>
+</div>
+<!-- end login sign up-->
+
+
+<!-- header-->
+<div class="header">
+    <div class="headerinner">
+        <ul class="headernav">
+            <li>
+                <i class="fa fa-code"></i>
+            </li>
+            <li><a href="../index.php">首页</a></li>
+            <li><a href="#">教程</a></li>
+            <li><a href="#">讲师</a></li>
+            <li><a href="#">助力</a></li>
+            <li><a href="#">为什么</a></li>
+        </ul>
+    </div>
+</div>
+<!-- end header-->
+
+
+<!--主内容-->
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="col-xs-3" id="scrollSpy">
+            <ul class="nav nav-tabs nav-stacked" data-spy="affix" data-offset-top="125">
+                <!--这是左侧分类导航内容-->
+            </ul>
+        </div>
+        <div class="col-xs-9">
+            <!--主显示内容-->
+        </div>
+    </div>
+</div>
+<!--end 主内容-->
+
+
+<!--footer-->
+<div id="footer">
+    <div style="width: 1024px;margin: 0 auto;color: #8c8c8c">
+        渝ICP备14002476号, Copyright © 2015-2018, cofuture.cn, All Rights Reserved
+    </div>
+</div>
+<!-- end footer-->
+
+</body>
+</html>
